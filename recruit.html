@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>採用情報 | ○○塗装会社</title>
+  <meta name="description" content="株式会社○○の採用情報ページです。新卒採用・中途採用の募集要項をご確認ください。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-primary: #1a1a2e;
+      --color-secondary: #0f3460;
+      --color-accent: #2563eb;
+      --color-cta: #f97316;
+      --color-light: #f8fafc;
+      --color-white: #ffffff;
+      --color-text: #333333;
+      --color-text-muted: #666666;
+      --color-border: #e2e8f0;
+      --font-ja: 'Noto Sans JP', sans-serif;
+      --font-en: 'Montserrat', sans-serif;
+      --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      --radius: 8px;
+      --transition: 0.3s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ja);
+      color: var(--color-text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background-color: rgba(26, 26, 46, 0.95);
+      backdrop-filter: blur(8px);
+      transition: background-color var(--transition);
+    }
+
+    .header--scrolled { background-color: rgba(26, 26, 46, 0.99); }
+
+    .header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 70px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header__logo { display: flex; flex-direction: column; line-height: 1.2; }
+    .header__logo-name { font-size: 1.05rem; font-weight: 700; color: var(--color-white); letter-spacing: 0.05em; }
+    .header__logo-sub { font-size: 0.6rem; color: rgba(255,255,255,0.5); font-family: var(--font-en); letter-spacing: 0.12em; text-transform: uppercase; }
+
+    .header__nav { display: flex; align-items: center; gap: 2rem; }
+    .header__nav-list { display: flex; align-items: center; gap: 1.5rem; }
+
+    .header__nav-item a {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.8);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      position: relative;
+      transition: color var(--transition);
+    }
+
+    .header__nav-item a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background-color: var(--color-cta);
+      transform: scaleX(0);
+      transition: transform var(--transition);
+    }
+
+    .header__nav-item a:hover { color: var(--color-white); }
+    .header__nav-item a:hover::after { transform: scaleX(1); }
+    .header__nav-item a.is-current { color: var(--color-white); }
+    .header__nav-item a.is-current::after { transform: scaleX(1); }
+
+    .header__cta {
+      background-color: var(--color-cta);
+      color: var(--color-white);
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: background-color var(--transition), transform var(--transition);
+    }
+
+    .header__cta:hover { background-color: #ea6c0a; transform: translateY(-1px); }
+
+    .header__hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 40px; height: 40px;
+      background: none; border: none;
+      cursor: pointer; gap: 5px;
+    }
+
+    .header__hamburger-line {
+      display: block;
+      width: 24px; height: 2px;
+      background-color: var(--color-white);
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    .header__hamburger.is-open .header__hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .header__hamburger.is-open .header__hamburger-line:nth-child(2) { opacity: 0; }
+    .header__hamburger.is-open .header__hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ===== MOBILE NAV ===== */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 70px; left: 0; right: 0; bottom: 0;
+      background-color: var(--color-primary);
+      z-index: 999;
+      padding: 2rem;
+      flex-direction: column;
+    }
+
+    .mobile-nav.is-open { display: flex; }
+
+    .mobile-nav__item a {
+      display: block;
+      color: var(--color-white);
+      font-size: 1.05rem;
+      font-weight: 500;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: color var(--transition);
+    }
+
+    .mobile-nav__item a:hover { color: var(--color-cta); }
+
+    /* ===== PAGE HERO ===== */
+    .page-hero {
+      padding-top: 70px;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      padding-bottom: 4rem;
+    }
+
+    .page-hero__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+    }
+
+    .page-hero__eyebrow {
+      display: block;
+      font-family: var(--font-en);
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      color: var(--color-cta);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .page-hero__title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--color-white);
+      line-height: 1.4;
+    }
+
+    .page-hero__title span {
+      display: block;
+      font-family: var(--font-en);
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.15em;
+      margin-top: 0.5rem;
+    }
+
+    /* ===== BREADCRUMB ===== */
+    .breadcrumb {
+      background-color: var(--color-light);
+      padding: 0.75rem 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .breadcrumb__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .breadcrumb__item a { color: var(--color-accent); }
+    .breadcrumb__item a:hover { text-decoration: underline; }
+    .breadcrumb__sep { color: var(--color-border); }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    /* ===== RECRUIT TYPE TABS ===== */
+    .recruit-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 4rem;
+      flex-wrap: wrap;
+    }
+
+    .recruit-tab {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color var(--transition), color var(--transition), transform var(--transition);
+      text-decoration: none;
+    }
+
+    .recruit-tab--new {
+      background-color: var(--color-accent);
+      color: var(--color-white);
+    }
+
+    .recruit-tab--mid {
+      background-color: var(--color-cta);
+      color: var(--color-white);
+    }
+
+    .recruit-tab:hover { transform: translateY(-2px); opacity: 0.9; }
+
+    .recruit-tab__icon {
+      width: 20px; height: 20px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ===== SECTION BLOCK ===== */
+    .section-block {
+      margin-bottom: 5rem;
+    }
+
+    .section-block__header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--color-accent);
+    }
+
+    .section-block--mid .section-block__header {
+      border-bottom-color: var(--color-cta);
+    }
+
+    .section-block__title-ja {
+      font-size: clamp(1.4rem, 2.5vw, 1.9rem);
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .section-block__title-en {
+      font-family: var(--font-en);
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ===== RECRUIT TABLE ===== */
+    .recruit-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 2rem;
+    }
+
+    .recruit-table th,
+    .recruit-table td {
+      padding: 1.1rem 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid var(--color-border);
+      font-size: 0.92rem;
+      line-height: 1.85;
+      vertical-align: top;
+    }
+
+    .recruit-table th {
+      width: 200px;
+      font-weight: 600;
+      color: var(--color-primary);
+      background-color: var(--color-light);
+      white-space: nowrap;
+    }
+
+    .recruit-table tr:first-child th,
+    .recruit-table tr:first-child td {
+      border-top: 1px solid var(--color-border);
+    }
+
+    .recruit-table td { color: var(--color-text); }
+
+    /* ===== CONTACT CARD ===== */
+    .contact-card {
+      background-color: var(--color-light);
+      border-radius: var(--radius);
+      padding: 2rem 2.5rem;
+      border-left: 4px solid var(--color-accent);
+      margin-top: 0.5rem;
+    }
+
+    .section-block--mid .contact-card {
+      border-left-color: var(--color-cta);
+    }
+
+    .contact-card__label {
+      font-size: 0.75rem;
+      color: var(--color-text-muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: var(--font-en);
+      margin-bottom: 0.75rem;
+    }
+
+    .contact-card__dept {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+    }
+
+    .contact-card__address {
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+      line-height: 1.9;
+    }
+
+    .contact-card__tel {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--font-en);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      margin-top: 0.75rem;
+    }
+
+    .contact-card__tel-icon {
+      width: 18px; height: 18px;
+      fill: var(--color-accent);
+    }
+
+    .section-block--mid .contact-card__tel-icon { fill: var(--color-cta); }
+
+    .contact-card__email {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+      color: var(--color-accent);
+      margin-top: 0.4rem;
+      transition: opacity var(--transition);
+    }
+
+    .contact-card__email:hover { opacity: 0.75; }
+
+    .section-block--mid .contact-card__email { color: var(--color-cta); }
+
+    .contact-card__email-icon {
+      width: 16px; height: 16px;
+      fill: currentColor;
+    }
+
+    .contact-card__person {
+      margin-top: 0.75rem;
+      font-size: 0.88rem;
+      color: var(--color-text-muted);
+    }
+
+    .contact-card__person strong {
+      color: var(--color-primary);
+      font-weight: 600;
+    }
+
+    .contact-card__info-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    /* ===== CTA BANNER ===== */
+    .cta-banner {
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      border-radius: var(--radius);
+      padding: 3rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 2rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .cta-banner__text { color: var(--color-white); }
+
+    .cta-banner__title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .cta-banner__desc {
+      font-size: 0.88rem;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .cta-banner__btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.9rem 2rem;
+      background-color: var(--color-cta);
+      color: var(--color-white);
+      border-radius: var(--radius);
+      font-weight: 700;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transition: background-color var(--transition), transform var(--transition);
+    }
+
+    .cta-banner__btn:hover { background-color: #ea6c0a; transform: translateY(-2px); }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background-color: var(--color-primary);
+      color: rgba(255,255,255,0.65);
+      padding: 4rem 2rem 2rem;
+    }
+
+    .footer__inner { max-width: 1200px; margin: 0 auto; }
+
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer__brand-name { font-size: 1.05rem; font-weight: 700; color: var(--color-white); margin-bottom: 0.3rem; }
+    .footer__brand-sub { font-size: 0.62rem; font-family: var(--font-en); letter-spacing: 0.12em; color: rgba(255,255,255,0.35); margin-bottom: 1rem; }
+    .footer__brand-desc { font-size: 0.8rem; line-height: 1.85; margin-bottom: 1.25rem; }
+    .footer__brand-tel { font-family: var(--font-en); font-size: 1.25rem; font-weight: 600; color: var(--color-white); }
+    .footer__brand-hours { font-size: 0.75rem; margin-top: 0.2rem; }
+
+    .footer__nav-title { font-size: 0.85rem; font-weight: 700; color: var(--color-white); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.12); }
+    .footer__nav-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer__nav-list a { font-size: 0.8rem; transition: color var(--transition); }
+    .footer__nav-list a:hover { color: var(--color-white); }
+
+    .footer__bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer__copy { font-size: 0.75rem; }
+    .footer__policy { display: flex; gap: 1.5rem; }
+    .footer__policy a { font-size: 0.75rem; transition: color var(--transition); }
+    .footer__policy a:hover { color: var(--color-white); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 768px) {
+      .header__nav { display: none; }
+      .header__hamburger { display: flex; }
+
+      .recruit-table th { width: 120px; font-size: 0.82rem; }
+      .recruit-table td { font-size: 0.85rem; }
+      .recruit-table th, .recruit-table td { padding: 0.9rem 1rem; }
+
+      .cta-banner { flex-direction: column; align-items: flex-start; }
+
+      .footer__top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer__bottom { flex-direction: column; align-items: flex-start; }
+
+      .main-content { padding: 3rem 1.25rem; }
+
+      .recruit-tabs { flex-direction: column; }
+      .recruit-tab { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header" id="js-header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo" aria-label="○○塗装会社 トップへ">
+        <span class="header__logo-name">○○塗装会社</span>
+        <span class="header__logo-sub">XX Painting Co., Ltd.</span>
+      </a>
+      <nav class="header__nav" aria-label="グローバルナビゲーション">
+        <ul class="header__nav-list">
+          <li class="header__nav-item"><a href="company.html">会社案内</a></li>
+          <li class="header__nav-item"><a href="index.html#features">サービス</a></li>
+          <li class="header__nav-item"><a href="case.html">施工実績</a></li>
+          <li class="header__nav-item"><a href="index.html#news">お知らせ</a></li>
+          <li class="header__nav-item"><a href="recruit.html" class="is-current">採用情報</a></li>
+        </ul>
+        <a href="index.html#contact" class="header__cta">お問い合わせ</a>
+      </nav>
+      <button class="header__hamburger" id="js-hamburger" aria-label="メニューを開く" aria-expanded="false">
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" id="js-mobile-nav" aria-label="モバイルナビゲーション">
+    <ul>
+      <li class="mobile-nav__item"><a href="company.html">会社案内</a></li>
+      <li class="mobile-nav__item"><a href="index.html#features">サービス</a></li>
+      <li class="mobile-nav__item"><a href="case.html">施工実績</a></li>
+      <li class="mobile-nav__item"><a href="index.html#news">お知らせ</a></li>
+      <li class="mobile-nav__item"><a href="recruit.html">採用情報</a></li>
+      <li class="mobile-nav__item"><a href="index.html#contact">お問い合わせ</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero__inner">
+      <span class="page-hero__eyebrow">Recruit</span>
+      <h1 class="page-hero__title">
+        採用情報
+        <span>Recruit Information</span>
+      </h1>
+    </div>
+  </div>
+
+  <nav class="breadcrumb" aria-label="パンくずリスト">
+    <div class="breadcrumb__inner">
+      <span class="breadcrumb__item"><a href="index.html">ホーム</a></span>
+      <span class="breadcrumb__sep">›</span>
+      <span class="breadcrumb__item">採用情報</span>
+    </div>
+  </nav>
+
+  <main>
+    <div class="main-content">
+
+      <!-- タブリンク -->
+      <div class="recruit-tabs">
+        <a href="#new-graduate" class="recruit-tab recruit-tab--new">
+          <svg class="recruit-tab__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/>
+          </svg>
+          新卒採用
+        </a>
+        <a href="#mid-career" class="recruit-tab recruit-tab--mid">
+          <svg class="recruit-tab__icon" viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 2.06 15.86 0 13.18 0c-1.3 0-2.51.52-3.38 1.44L8 3.27 6.2 1.44C5.33.52 4.12 0 2.82 0 .14 0-1.9 2.06-1.9 4.64c0 .48.11.92.18 1.36H-2c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h22c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM13.18 2c.89 0 1.82.73 1.82 2.64 0 1.43-1.45 2.86-2.55 3.86-.33.3-.6.56-.81.78L8 5.59c.87-.97 1.9-3.59 5.18-3.59zM4.82 2C8.1 2 9.13 4.62 10 5.59L6.36 9.28c-.21-.22-.48-.48-.81-.78C4.45 7.5 3 6.07 3 4.64 3 2.73 3.93 2 4.82 2zM22 22H2V8h4.95L12 13.27 17.05 8H22v14z"/>
+          </svg>
+          中途採用
+        </a>
+      </div>
+
+      <!-- 新卒採用 -->
+      <section class="section-block" id="new-graduate">
+        <div class="section-block__header">
+          <h2 class="section-block__title-ja">新卒採用情報</h2>
+          <span class="section-block__title-en">New Graduate</span>
+        </div>
+        <table class="recruit-table">
+          <tbody>
+            <tr>
+              <th scope="row">募集職種</th>
+              <td>建築仕上げ工事・リニューアル工事等の施工管理</td>
+            </tr>
+            <tr>
+              <th scope="row">募集方法</th>
+              <td></td>
+            </tr>
+            <tr>
+              <th scope="row">選考方法</th>
+              <td>書類選考・面接</td>
+            </tr>
+            <tr>
+              <th scope="row">勤務地</th>
+              <td>本社（東京支店）及び横浜支店</td>
+            </tr>
+            <tr>
+              <th scope="row">給与</th>
+              <td>大卒（総合職）　240,000円</td>
+            </tr>
+            <tr>
+              <th scope="row">昇給・賞与</th>
+              <td>昇給：年1回（4月）　　賞与：年2回</td>
+            </tr>
+            <tr>
+              <th scope="row">勤務時間</th>
+              <td>08:30〜17:30</td>
+            </tr>
+            <tr>
+              <th scope="row">休日休暇</th>
+              <td>週休2日制、夏期休暇、年末年始休暇、有給休暇（10〜20日）、慶弔休暇他</td>
+            </tr>
+            <tr>
+              <th scope="row">資料請求先</th>
+              <td>
+                <div class="contact-card">
+                  <div class="contact-card__label">Contact</div>
+                  <div class="contact-card__dept">総務部</div>
+                  <div class="contact-card__address">
+                    〒101-0051<br>
+                    東京都千代田区神田神保町1-20
+                  </div>
+                  <div class="contact-card__info-group">
+                    <div class="contact-card__tel">
+                      <svg class="contact-card__tel-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                      </svg>
+                      TEL. 03-3293-4802
+                    </div>
+                    <a class="contact-card__email" href="mailto:ip21@ip21.co.jp">
+                      <svg class="contact-card__email-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                      </svg>
+                      ip21@ip21.co.jp
+                    </a>
+                  </div>
+                  <div class="contact-card__person">担当者：<strong>山﨑</strong>宛</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- 中途採用 -->
+      <section class="section-block section-block--mid" id="mid-career">
+        <div class="section-block__header">
+          <h2 class="section-block__title-ja">中途採用情報</h2>
+          <span class="section-block__title-en">Mid-Career</span>
+        </div>
+        <table class="recruit-table">
+          <tbody>
+            <tr>
+              <th scope="row">募集職種</th>
+              <td>建築技術者（建築現場での施工管理）</td>
+            </tr>
+            <tr>
+              <th scope="row">募集対象</th>
+              <td>施工管理技士資格保有者<br>40歳位まで</td>
+            </tr>
+            <tr>
+              <th scope="row">募集方法</th>
+              <td></td>
+            </tr>
+            <tr>
+              <th scope="row">選考方法</th>
+              <td>書類選考・面接</td>
+            </tr>
+            <tr>
+              <th scope="row">勤務地</th>
+              <td>本社（東京支店）及び横浜支店</td>
+            </tr>
+            <tr>
+              <th scope="row">給与</th>
+              <td>当社規定により優遇</td>
+            </tr>
+            <tr>
+              <th scope="row">昇給・賞与</th>
+              <td>昇給：年1回（4月）　　賞与：年2回</td>
+            </tr>
+            <tr>
+              <th scope="row">勤務時間</th>
+              <td>08:30〜17:30</td>
+            </tr>
+            <tr>
+              <th scope="row">休日休暇</th>
+              <td>週休2日制、夏期休暇、年末年始休暇、有給休暇（10〜20日）、慶弔休暇他</td>
+            </tr>
+            <tr>
+              <th scope="row">資料請求先</th>
+              <td>
+                <div class="contact-card">
+                  <div class="contact-card__label">Contact</div>
+                  <div class="contact-card__dept">総務部</div>
+                  <div class="contact-card__address">
+                    〒101-0051<br>
+                    東京都千代田区神田神保町1-20
+                  </div>
+                  <div class="contact-card__info-group">
+                    <div class="contact-card__tel">
+                      <svg class="contact-card__tel-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+                      </svg>
+                      TEL. 03-3293-4802
+                    </div>
+                    <a class="contact-card__email" href="mailto:ip21@ip21.co.jp">
+                      <svg class="contact-card__email-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                      </svg>
+                      ip21@ip21.co.jp
+                    </a>
+                  </div>
+                  <div class="contact-card__person">担当者：<strong>吉田</strong>宛</div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <!-- CTAバナー -->
+      <div class="cta-banner">
+        <div class="cta-banner__text">
+          <div class="cta-banner__title">ご不明な点はお気軽にお問い合わせください</div>
+          <div class="cta-banner__desc">採用に関するご質問・資料請求はメール・お電話にてお受けしております。</div>
+        </div>
+        <a href="index.html#contact" class="cta-banner__btn">
+          お問い合わせはこちら
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <div class="footer__brand-name">○○塗装会社</div>
+          <div class="footer__brand-sub">XX Painting Co., Ltd.</div>
+          <p class="footer__brand-desc">建築総合仕上げ企業として、外壁塗装・屋上防水・内装工事など建築仕上げ工事全般に幅広く対応しております。技術は拡大し、企業は進化する。</p>
+          <div class="footer__brand-tel">045-XXX-XXXX</div>
+          <div class="footer__brand-hours">平日 8:00〜18:00（土曜応相談）</div>
+        </div>
+        <nav aria-label="事業紹介">
+          <div class="footer__nav-title">事業紹介</div>
+          <ul class="footer__nav-list">
+            <li><a href="index.html#features">外壁塗装</a></li>
+            <li><a href="index.html#features">屋根塗装</a></li>
+            <li><a href="index.html#features">防水工事</a></li>
+            <li><a href="index.html#features">大規模修繕</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="会社情報">
+          <div class="footer__nav-title">会社情報</div>
+          <ul class="footer__nav-list">
+            <li><a href="company.html">会社概要</a></li>
+            <li><a href="company.html#history">ヒストリー</a></li>
+            <li><a href="case.html">施工実績</a></li>
+            <li><a href="index.html#news">お知らせ</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="採用・その他">
+          <div class="footer__nav-title">採用・その他</div>
+          <ul class="footer__nav-list">
+            <li><a href="recruit.html">採用情報</a></li>
+            <li><a href="recruit.html#new-graduate">新卒採用</a></li>
+            <li><a href="recruit.html#mid-career">中途採用</a></li>
+            <li><a href="index.html#contact">お問い合わせ</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2024 ○○塗装会社 All Rights Reserved.</p>
+        <div class="footer__policy">
+          <a href="#">プライバシーポリシー</a>
+          <a href="#">サイトポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('js-header');
+    const hamburger = document.getElementById('js-hamburger');
+    const mobileNav = document.getElementById('js-mobile-nav');
+
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('header--scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('is-open');
+      hamburger.classList.toggle('is-open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('is-open');
+        hamburger.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+  </script>
+</body>
+</html>

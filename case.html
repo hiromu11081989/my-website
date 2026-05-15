@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>施工事例 | ○○塗装会社</title>
+  <meta name="description" content="株式会社○○の施工事例一覧です。集合住宅・大学・ホテル・スタジアム・公共施設・特殊建築物・橋梁など幅広い実績をご紹介します。">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700&family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --color-primary: #1a1a2e;
+      --color-secondary: #0f3460;
+      --color-accent: #2563eb;
+      --color-cta: #f97316;
+      --color-light: #f8fafc;
+      --color-white: #ffffff;
+      --color-text: #333333;
+      --color-text-muted: #666666;
+      --color-border: #e2e8f0;
+      --font-ja: 'Noto Sans JP', sans-serif;
+      --font-en: 'Montserrat', sans-serif;
+      --shadow: 0 2px 8px rgba(0,0,0,0.08);
+      --radius: 8px;
+      --transition: 0.3s ease;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ja);
+      color: var(--color-text);
+      line-height: 1.7;
+      overflow-x: hidden;
+    }
+
+    img { max-width: 100%; height: auto; display: block; }
+    a { color: inherit; text-decoration: none; }
+    ul { list-style: none; }
+
+    /* ===== HEADER ===== */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background-color: rgba(26,26,46,0.95);
+      backdrop-filter: blur(8px);
+      transition: background-color var(--transition);
+    }
+
+    .header--scrolled { background-color: rgba(26,26,46,0.99); }
+
+    .header__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 70px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .header__logo { display: flex; flex-direction: column; line-height: 1.2; }
+    .header__logo-name { font-size: 1.05rem; font-weight: 700; color: var(--color-white); letter-spacing: 0.05em; }
+    .header__logo-sub { font-size: 0.6rem; color: rgba(255,255,255,0.5); font-family: var(--font-en); letter-spacing: 0.12em; text-transform: uppercase; }
+
+    .header__nav { display: flex; align-items: center; gap: 2rem; }
+    .header__nav-list { display: flex; align-items: center; gap: 1.5rem; }
+
+    .header__nav-item a {
+      font-size: 0.8rem;
+      color: rgba(255,255,255,0.8);
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      position: relative;
+      transition: color var(--transition);
+    }
+
+    .header__nav-item a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px; left: 0; right: 0;
+      height: 1px;
+      background-color: var(--color-cta);
+      transform: scaleX(0);
+      transition: transform var(--transition);
+    }
+
+    .header__nav-item a:hover { color: var(--color-white); }
+    .header__nav-item a:hover::after { transform: scaleX(1); }
+    .header__nav-item a.is-current { color: var(--color-white); }
+    .header__nav-item a.is-current::after { transform: scaleX(1); }
+
+    .header__cta {
+      background-color: var(--color-cta);
+      color: var(--color-white);
+      padding: 0.5rem 1.25rem;
+      border-radius: var(--radius);
+      font-size: 0.8rem;
+      font-weight: 700;
+      transition: background-color var(--transition), transform var(--transition);
+    }
+
+    .header__cta:hover { background-color: #ea6c0a; transform: translateY(-1px); }
+
+    .header__hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 40px; height: 40px;
+      background: none; border: none;
+      cursor: pointer; gap: 5px;
+    }
+
+    .header__hamburger-line {
+      display: block;
+      width: 24px; height: 2px;
+      background-color: var(--color-white);
+      transition: transform var(--transition), opacity var(--transition);
+    }
+
+    .header__hamburger.is-open .header__hamburger-line:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .header__hamburger.is-open .header__hamburger-line:nth-child(2) { opacity: 0; }
+    .header__hamburger.is-open .header__hamburger-line:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* ===== MOBILE NAV ===== */
+    .mobile-nav {
+      display: none;
+      position: fixed;
+      top: 70px; left: 0; right: 0; bottom: 0;
+      background-color: var(--color-primary);
+      z-index: 999;
+      padding: 2rem;
+      flex-direction: column;
+    }
+
+    .mobile-nav.is-open { display: flex; }
+
+    .mobile-nav__item a {
+      display: block;
+      color: var(--color-white);
+      font-size: 1.05rem;
+      font-weight: 500;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      transition: color var(--transition);
+    }
+
+    .mobile-nav__item a:hover { color: var(--color-cta); }
+
+    /* ===== PAGE HERO ===== */
+    .page-hero {
+      padding-top: 70px;
+      background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+      padding-bottom: 4rem;
+    }
+
+    .page-hero__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 4rem 2rem 2rem;
+    }
+
+    .page-hero__eyebrow {
+      display: block;
+      font-family: var(--font-en);
+      font-size: 0.72rem;
+      letter-spacing: 0.3em;
+      color: var(--color-cta);
+      text-transform: uppercase;
+      margin-bottom: 1rem;
+    }
+
+    .page-hero__title {
+      font-size: clamp(1.8rem, 4vw, 2.8rem);
+      font-weight: 700;
+      color: var(--color-white);
+      line-height: 1.4;
+    }
+
+    .page-hero__title span {
+      display: block;
+      font-family: var(--font-en);
+      font-size: 0.9rem;
+      font-weight: 400;
+      color: rgba(255,255,255,0.55);
+      letter-spacing: 0.15em;
+      margin-top: 0.5rem;
+    }
+
+    /* ===== BREADCRUMB ===== */
+    .breadcrumb {
+      background-color: var(--color-light);
+      padding: 0.75rem 2rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .breadcrumb__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--color-text-muted);
+    }
+
+    .breadcrumb__item a { color: var(--color-accent); }
+    .breadcrumb__item a:hover { text-decoration: underline; }
+    .breadcrumb__sep { color: var(--color-border); }
+
+    /* ===== CATEGORY NAV ===== */
+    .cat-nav {
+      background-color: var(--color-white);
+      border-bottom: 1px solid var(--color-border);
+      position: sticky;
+      top: 70px;
+      z-index: 100;
+    }
+
+    .cat-nav__inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .cat-nav__inner::-webkit-scrollbar { display: none; }
+
+    .cat-nav__item {
+      flex-shrink: 0;
+    }
+
+    .cat-nav__item a {
+      display: block;
+      padding: 1rem 1.25rem;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: var(--color-text-muted);
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: color var(--transition), border-color var(--transition);
+    }
+
+    .cat-nav__item a:hover,
+    .cat-nav__item a.is-active {
+      color: var(--color-accent);
+      border-bottom-color: var(--color-accent);
+    }
+
+    /* ===== MAIN CONTENT ===== */
+    .main-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+
+    /* ===== CASE SECTION ===== */
+    .case-section {
+      margin-bottom: 6rem;
+    }
+
+    .case-section__header {
+      display: flex;
+      align-items: baseline;
+      gap: 1.25rem;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 2px solid var(--color-accent);
+    }
+
+    .case-section__title-ja {
+      font-size: clamp(1.3rem, 2.5vw, 1.75rem);
+      font-weight: 700;
+      color: var(--color-primary);
+    }
+
+    .case-section__title-en {
+      font-family: var(--font-en);
+      font-size: 0.75rem;
+      letter-spacing: 0.2em;
+      color: var(--color-text-muted);
+      text-transform: uppercase;
+    }
+
+    /* ===== CASE GRID ===== */
+    .case-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    .case-card {
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      background-color: var(--color-white);
+      transition: transform var(--transition), box-shadow var(--transition);
+    }
+
+    .case-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    }
+
+    .case-card__img-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .case-card__img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s ease;
+    }
+
+    .case-card:hover .case-card__img { transform: scale(1.05); }
+
+    .case-card__badge {
+      position: absolute;
+      top: 0.75rem;
+      left: 0.75rem;
+      background-color: var(--color-accent);
+      color: var(--color-white);
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.25rem 0.6rem;
+      border-radius: 3px;
+      font-family: var(--font-en);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .case-card__body {
+      padding: 1.25rem 1.5rem 1.5rem;
+    }
+
+    .case-card__title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+      line-height: 1.55;
+    }
+
+    .case-card__meta {
+      font-size: 0.78rem;
+      color: var(--color-text-muted);
+    }
+
+    /* ===== PLACEHOLDER CARD (no image) ===== */
+    .case-card--placeholder .case-card__img-wrap {
+      background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+      height: 220px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .case-card--placeholder .case-card__placeholder-icon {
+      width: 48px;
+      height: 48px;
+      fill: #94a3b8;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      background-color: var(--color-primary);
+      color: rgba(255,255,255,0.65);
+      padding: 4rem 2rem 2rem;
+    }
+
+    .footer__inner { max-width: 1200px; margin: 0 auto; }
+
+    .footer__top {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 3rem;
+      padding-bottom: 3rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .footer__brand-name { font-size: 1.05rem; font-weight: 700; color: var(--color-white); margin-bottom: 0.3rem; }
+    .footer__brand-sub { font-size: 0.62rem; font-family: var(--font-en); letter-spacing: 0.12em; color: rgba(255,255,255,0.35); margin-bottom: 1rem; }
+    .footer__brand-desc { font-size: 0.8rem; line-height: 1.85; margin-bottom: 1.25rem; }
+    .footer__brand-tel { font-family: var(--font-en); font-size: 1.25rem; font-weight: 600; color: var(--color-white); }
+    .footer__brand-hours { font-size: 0.75rem; margin-top: 0.2rem; }
+
+    .footer__nav-title { font-size: 0.85rem; font-weight: 700; color: var(--color-white); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.12); }
+    .footer__nav-list { display: flex; flex-direction: column; gap: 0.5rem; }
+    .footer__nav-list a { font-size: 0.8rem; transition: color var(--transition); }
+    .footer__nav-list a:hover { color: var(--color-white); }
+
+    .footer__bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    .footer__copy { font-size: 0.75rem; }
+    .footer__policy { display: flex; gap: 1.5rem; }
+    .footer__policy a { font-size: 0.75rem; transition: color var(--transition); }
+    .footer__policy a:hover { color: var(--color-white); }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1024px) {
+      .case-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .header__nav { display: none; }
+      .header__hamburger { display: flex; }
+
+      .case-grid { grid-template-columns: 1fr; }
+
+      .footer__top { grid-template-columns: 1fr 1fr; gap: 2rem; }
+      .footer__bottom { flex-direction: column; align-items: flex-start; }
+
+      .main-content { padding: 3rem 1.25rem; }
+
+      .cat-nav__item a { padding: 0.85rem 1rem; font-size: 0.78rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header" id="js-header">
+    <div class="header__inner">
+      <a href="index.html" class="header__logo" aria-label="○○塗装会社 トップへ">
+        <span class="header__logo-name">○○塗装会社</span>
+        <span class="header__logo-sub">XX Painting Co., Ltd.</span>
+      </a>
+      <nav class="header__nav" aria-label="グローバルナビゲーション">
+        <ul class="header__nav-list">
+          <li class="header__nav-item"><a href="company.html">会社案内</a></li>
+          <li class="header__nav-item"><a href="index.html#features">サービス</a></li>
+          <li class="header__nav-item"><a href="case.html" class="is-current">施工実績</a></li>
+          <li class="header__nav-item"><a href="index.html#news">お知らせ</a></li>
+          <li class="header__nav-item"><a href="index.html#recruit">採用情報</a></li>
+        </ul>
+        <a href="index.html#contact" class="header__cta">お問い合わせ</a>
+      </nav>
+      <button class="header__hamburger" id="js-hamburger" aria-label="メニューを開く" aria-expanded="false">
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+        <span class="header__hamburger-line"></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="mobile-nav" id="js-mobile-nav" aria-label="モバイルナビゲーション">
+    <ul>
+      <li class="mobile-nav__item"><a href="company.html">会社案内</a></li>
+      <li class="mobile-nav__item"><a href="index.html#features">サービス</a></li>
+      <li class="mobile-nav__item"><a href="case.html">施工実績</a></li>
+      <li class="mobile-nav__item"><a href="index.html#news">お知らせ</a></li>
+      <li class="mobile-nav__item"><a href="index.html#recruit">採用情報</a></li>
+      <li class="mobile-nav__item"><a href="index.html#contact">お問い合わせ</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hero">
+    <div class="page-hero__inner">
+      <span class="page-hero__eyebrow">Works</span>
+      <h1 class="page-hero__title">
+        施工事例
+        <span>Construction Cases</span>
+      </h1>
+    </div>
+  </div>
+
+  <nav class="breadcrumb" aria-label="パンくずリスト">
+    <div class="breadcrumb__inner">
+      <span class="breadcrumb__item"><a href="index.html">ホーム</a></span>
+      <span class="breadcrumb__sep">›</span>
+      <span class="breadcrumb__item">施工事例</span>
+    </div>
+  </nav>
+
+  <!-- カテゴリナビ -->
+  <nav class="cat-nav" aria-label="カテゴリ">
+    <div class="cat-nav__inner">
+      <div class="cat-nav__item"><a href="#collective" class="is-active">集合住宅</a></div>
+      <div class="cat-nav__item"><a href="#university">大学</a></div>
+      <div class="cat-nav__item"><a href="#hotel">ホテル</a></div>
+      <div class="cat-nav__item"><a href="#stadium">スタジアム</a></div>
+      <div class="cat-nav__item"><a href="#public">公共施設</a></div>
+      <div class="cat-nav__item"><a href="#special">特殊建築物</a></div>
+      <div class="cat-nav__item"><a href="#bridge">橋梁</a></div>
+    </div>
+  </nav>
+
+  <main>
+    <div class="main-content">
+
+      <!-- 集合住宅 -->
+      <section class="case-section" id="collective">
+        <div class="case-section__header">
+          <h2 class="case-section__title-ja">集合住宅</h2>
+          <span class="case-section__title-en">Collective Housing</span>
+        </div>
+        <div class="case-grid">
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/30737810/pexels-photo-30737810.jpeg?auto=compress&cs=tinysrgb&w=800" alt="大規模マンション 外壁塗装・大規模修繕工事" width="600" height="440">
+              <span class="case-card__badge">Renovation</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">東京都内 大規模マンション<br>外壁塗装・大規模修繕工事</h3>
+              <p class="case-card__meta">東京都 / 地上18階建て</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/33619255/pexels-photo-33619255.jpeg?auto=compress&cs=tinysrgb&w=800" alt="横浜市 分譲マンション 防水・塗装工事" width="600" height="440">
+              <span class="case-card__badge">Waterproofing</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">横浜市 分譲マンション<br>屋上防水・外壁塗装工事</h3>
+              <p class="case-card__meta">神奈川県 / 地上12階建て</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/3164031/pexels-photo-3164031.jpeg?auto=compress&cs=tinysrgb&w=800" alt="都営住宅 改修工事" width="600" height="440">
+              <span class="case-card__badge">Exterior</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">都営住宅 外壁改修工事<br>シーリング打ち替え</h3>
+              <p class="case-card__meta">東京都 / 複数棟</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 大学 -->
+      <section class="case-section" id="university">
+        <div class="case-section__header">
+          <h2 class="case-section__title-ja">大学</h2>
+          <span class="case-section__title-en">University</span>
+        </div>
+        <div class="case-grid">
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/356086/pexels-photo-356086.jpeg?auto=compress&cs=tinysrgb&w=800" alt="都内大学 本館 外壁塗装工事" width="600" height="440">
+              <span class="case-card__badge">Exterior</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">都内大学 本館<br>外壁塗装・改修工事</h3>
+              <p class="case-card__meta">東京都 / 地上10階建て</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/16741356/pexels-photo-16741356.jpeg?auto=compress&cs=tinysrgb&w=800" alt="大学図書館 内装・外装改修工事" width="600" height="440">
+              <span class="case-card__badge">Renovation</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">大学図書館<br>内装・外装総合改修工事</h3>
+              <p class="case-card__meta">神奈川県 / 地上6階建て</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/885944/pexels-photo-885944.jpeg?auto=compress&cs=tinysrgb&w=800" alt="大学体育館 屋根・外壁工事" width="600" height="440">
+              <span class="case-card__badge">Roofing</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">大学体育館<br>屋根塗装・外壁補修工事</h3>
+              <p class="case-card__meta">東京都 / 大型体育施設</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ホテル -->
+      <section class="case-section" id="hotel">
+        <div class="case-section__header">
+          <h2 class="case-section__title-ja">ホテル</h2>
+          <span class="case-section__title-en">Hotel</span>
+        </div>
+        <div class="case-grid">
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/9376/pexels-photo-9376.jpeg?auto=compress&cs=tinysrgb&w=800" alt="都心高層ホテル 外装改修工事" width="600" height="440">
+              <span class="case-card__badge">High-rise</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">都心高層ホテル<br>外装改修・塗装工事</h3>
+              <p class="case-card__meta">東京都 / 地上40階建て</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/9544816/pexels-photo-9544816.jpeg?auto=compress&cs=tinysrgb&w=800" alt="横浜ウォーターフロントホテル 改修工事" width="600" height="440">
+              <span class="case-card__badge">Renovation</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">横浜ウォーターフロントホテル<br>外壁改修工事</h3>
+              <p class="case-card__meta">神奈川県 / 地上25階建て</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/12218255/pexels-photo-12218255.jpeg?auto=compress&cs=tinysrgb&w=800" alt="ビジネスホテル 外装リニューアル工事" width="600" height="440">
+              <span class="case-card__badge">Renewal</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">ビジネスホテル<br>外装リニューアル工事</h3>
+              <p class="case-card__meta">東京都 / 地上15階建て</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- スタジアム -->
+      <section class="case-section" id="stadium">
+        <div class="case-section__header">
+          <h2 class="case-section__title-ja">スタジアム</h2>
+          <span class="case-section__title-en">Stadium</span>
+        </div>
+        <div class="case-grid">
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/9739469/pexels-photo-9739469.jpeg?auto=compress&cs=tinysrgb&w=800" alt="大型スポーツスタジアム 外装塗装工事" width="600" height="440">
+              <span class="case-card__badge">Sports</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">大型スポーツスタジアム<br>外装塗装・防水工事</h3>
+              <p class="case-card__meta">関東 / 収容人数5万人規模</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/270071/pexels-photo-270071.jpeg?auto=compress&cs=tinysrgb&w=800" alt="野球場 スタンド塗装工事" width="600" height="440">
+              <span class="case-card__badge">Painting</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">野球場 スタンド・外壁<br>塗装改修工事</h3>
+              <p class="case-card__meta">東京都 / プロ野球本拠地球場</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/274570/pexels-photo-274570.jpeg?auto=compress&cs=tinysrgb&w=800" alt="体育館 屋根・鉄骨塗装工事" width="600" height="440">
+              <span class="case-card__badge">Steel</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">総合体育館<br>屋根・鉄骨構造物塗装工事</h3>
+              <p class="case-card__meta">神奈川県 / 大型アリーナ</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 公共施設 -->
+      <section class="case-section" id="public">
+        <div class="case-section__header">
+          <h2 class="case-section__title-ja">公共施設</h2>
+          <span class="case-section__title-en">Public Facility</span>
+        </div>
+        <div class="case-grid">
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/11268035/pexels-photo-11268035.jpeg?auto=compress&cs=tinysrgb&w=800" alt="市庁舎 外壁改修工事" width="600" height="440">
+              <span class="case-card__badge">Government</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">市庁舎 外壁改修<br>塗装・シーリング工事</h3>
+              <p class="case-card__meta">神奈川県 / 地上12階建て</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/10586212/pexels-photo-10586212.jpeg?auto=compress&cs=tinysrgb&w=800" alt="公立病院 外壁・屋上防水工事" width="600" height="440">
+              <span class="case-card__badge">Hospital</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">公立病院 外壁塗装<br>屋上防水改修工事</h3>
+              <p class="case-card__meta">東京都 / 地上8階建て</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/6610676/pexels-photo-6610676.jpeg?auto=compress&cs=tinysrgb&w=800" alt="公共図書館 改修工事" width="600" height="440">
+              <span class="case-card__badge">Culture</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">公共図書館・文化センター<br>外装リニューアル工事</h3>
+              <p class="case-card__meta">東京都 / 複合文化施設</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 特殊建築物 -->
+      <section class="case-section" id="special">
+        <div class="case-section__header">
+          <h2 class="case-section__title-ja">特殊建築物</h2>
+          <span class="case-section__title-en">Special Structure</span>
+        </div>
+        <div class="case-grid">
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/5747939/pexels-photo-5747939.jpeg?auto=compress&cs=tinysrgb&w=800" alt="超高層ビル 外壁・鉄骨塗装工事" width="600" height="440">
+              <span class="case-card__badge">High-rise</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">新宿超高層ビル<br>外壁・鉄骨塗装工事</h3>
+              <p class="case-card__meta">東京都 / 地上50階超</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/17180396/pexels-photo-17180396.jpeg?auto=compress&cs=tinysrgb&w=800" alt="工場・倉庫 大型外装塗装工事" width="600" height="440">
+              <span class="case-card__badge">Industrial</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">大型工場・倉庫施設<br>外装塗装・防錆工事</h3>
+              <p class="case-card__meta">関東 / 延床面積2万㎡超</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/3534785/pexels-photo-3534785.jpeg?auto=compress&cs=tinysrgb&w=800" alt="タワーマンション 外装改修工事" width="600" height="440">
+              <span class="case-card__badge">Tower</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">タワーマンション<br>外装大規模改修工事</h3>
+              <p class="case-card__meta">東京都 / 地上60階建て</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- 橋梁 -->
+      <section class="case-section" id="bridge">
+        <div class="case-section__header">
+          <h2 class="case-section__title-ja">橋梁</h2>
+          <span class="case-section__title-en">Bridge</span>
+        </div>
+        <div class="case-grid">
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/128362/pexels-photo-128362.jpeg?auto=compress&cs=tinysrgb&w=800" alt="道路橋 鋼橋塗装工事" width="600" height="440">
+              <span class="case-card__badge">Steel Bridge</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">道路橋 鋼橋<br>塗装・防錆改修工事</h3>
+              <p class="case-card__meta">関東 / 全長300m</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/53358/pexels-photo-53358.jpeg?auto=compress&cs=tinysrgb&w=800" alt="歩道橋 塗装改修工事" width="600" height="440">
+              <span class="case-card__badge">Footbridge</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">歩道橋・横断橋<br>塗装改修工事</h3>
+              <p class="case-card__meta">東京都・神奈川県 / 複数箇所</p>
+            </div>
+          </article>
+          <article class="case-card">
+            <div class="case-card__img-wrap">
+              <img class="case-card__img" src="https://images.pexels.com/photos/32911332/pexels-photo-32911332.jpeg?auto=compress&cs=tinysrgb&w=800" alt="港湾施設 鋼構造物塗装工事" width="600" height="440">
+              <span class="case-card__badge">Port</span>
+            </div>
+            <div class="case-card__body">
+              <h3 class="case-card__title">港湾施設 鋼構造物<br>防食塗装工事</h3>
+              <p class="case-card__meta">神奈川県 / 横浜港湾エリア</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer__inner">
+      <div class="footer__top">
+        <div class="footer__brand">
+          <div class="footer__brand-name">○○塗装会社</div>
+          <div class="footer__brand-sub">XX Painting Co., Ltd.</div>
+          <p class="footer__brand-desc">建築総合仕上げ企業として、外壁塗装・屋上防水・内装工事など建築仕上げ工事全般に幅広く対応しております。技術は拡大し、企業は進化する。</p>
+          <div class="footer__brand-tel">045-XXX-XXXX</div>
+          <div class="footer__brand-hours">平日 8:00〜18:00（土曜応相談）</div>
+        </div>
+        <nav aria-label="事業紹介">
+          <div class="footer__nav-title">事業紹介</div>
+          <ul class="footer__nav-list">
+            <li><a href="index.html#features">外壁塗装</a></li>
+            <li><a href="index.html#features">屋根塗装</a></li>
+            <li><a href="index.html#features">防水工事</a></li>
+            <li><a href="index.html#features">大規模修繕</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="会社情報">
+          <div class="footer__nav-title">会社情報</div>
+          <ul class="footer__nav-list">
+            <li><a href="company.html">会社概要</a></li>
+            <li><a href="company.html#history">ヒストリー</a></li>
+            <li><a href="case.html">施工実績</a></li>
+            <li><a href="index.html#news">お知らせ</a></li>
+          </ul>
+        </nav>
+        <nav aria-label="採用・その他">
+          <div class="footer__nav-title">採用・その他</div>
+          <ul class="footer__nav-list">
+            <li><a href="index.html#recruit">採用情報</a></li>
+            <li><a href="index.html#contact">協力業者募集</a></li>
+            <li><a href="index.html#contact">お問い合わせ</a></li>
+          </ul>
+        </nav>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copy">&copy; 2024 ○○塗装会社 All Rights Reserved.</p>
+        <div class="footer__policy">
+          <a href="#">プライバシーポリシー</a>
+          <a href="#">サイトポリシー</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const header = document.getElementById('js-header');
+    const hamburger = document.getElementById('js-hamburger');
+    const mobileNav = document.getElementById('js-mobile-nav');
+
+    window.addEventListener('scroll', () => {
+      header.classList.toggle('header--scrolled', window.scrollY > 50);
+    }, { passive: true });
+
+    hamburger.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('is-open');
+      hamburger.classList.toggle('is-open', isOpen);
+      hamburger.setAttribute('aria-expanded', String(isOpen));
+    });
+
+    mobileNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileNav.classList.remove('is-open');
+        hamburger.classList.remove('is-open');
+        hamburger.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    /* カテゴリナビのアクティブ切替 */
+    const catLinks = document.querySelectorAll('.cat-nav__item a');
+    const sections = document.querySelectorAll('.case-section');
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          catLinks.forEach(l => l.classList.remove('is-active'));
+          const target = document.querySelector(`.cat-nav__item a[href="#${entry.target.id}"]`);
+          if (target) target.classList.add('is-active');
+        }
+      });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+
+    sections.forEach(s => observer.observe(s));
+  </script>
+</body>
+</html>
